@@ -1,0 +1,12 @@
+{
+    "values":
+    [
+        "doudizhu:loop/timer",
+        "doudizhu:loop/bgm_ctrl",
+        "doudizhu:loop/rt",
+        "doudizhu:loop/amplify",
+        "doudizhu:loop/show_abandoned_cards",
+        "doudizhu:loop/high_light",
+        "doudizhu:loop/clear_rclick"
+    ]
+}
