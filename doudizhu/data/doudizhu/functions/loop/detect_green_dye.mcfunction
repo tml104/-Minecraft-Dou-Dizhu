@@ -14,6 +14,16 @@ execute if entity @s[nbt=!{Inventory:[{Slot:18b,id:"minecraft:green_dye"}]}] run
 execute if entity @s[nbt=!{Inventory:[{Slot:19b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 11
 execute if entity @s[nbt=!{Inventory:[{Slot:20b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 12
 execute if entity @s[nbt=!{Inventory:[{Slot:21b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 13
+execute if entity @s[nbt=!{Inventory:[{Slot:22b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 14
+execute if entity @s[nbt=!{Inventory:[{Slot:23b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 15
+execute if entity @s[nbt=!{Inventory:[{Slot:24b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 16
+execute if entity @s[nbt=!{Inventory:[{Slot:25b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 17
+execute if entity @s[nbt=!{Inventory:[{Slot:26b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 18
+execute if entity @s[nbt=!{Inventory:[{Slot:27b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 19
+
+execute if entity @s[nbt=!{Inventory:[{Slot:28b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 20
+execute if entity @s[nbt=!{Inventory:[{Slot:29b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 21
+execute if entity @s[nbt=!{Inventory:[{Slot:30b,id:"minecraft:green_dye"}]}] run scoreboard players set @s test_green_dye 22
 
 
 #阻止刚进入的玩家播放语音

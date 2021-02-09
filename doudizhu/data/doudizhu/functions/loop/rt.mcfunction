@@ -4,24 +4,27 @@
 #重设盔甲架Glowing
 execute as @e[type=armor_stand,tag=doudizhu] run data merge entity @s {Glowing:0b}
 #execute as @e[type=armor_stand,tag=doudizhu,team=Selected] run data merge entity @s {Glowing:1b}
-#检测Q
+#检测Q：test_q由游戏修改
 execute if score round var matches -1 as @a[scores={test_q=1..}] run function doudizhu:replaceitem_beforestart
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase1] as @a[scores={test_q=1..}] run function doudizhu:replaceitem_jiao
+execute if entity @e[tag=doudizhu,tag=Center,tag=Phase3] as @a[scores={test_q=1..}] run function doudizhu:replaceitem_qiang
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] as @a[scores={test_q=1..}] run function doudizhu:replaceitem_chupai
-#检测F
+#检测F：F需要手动判定
 execute as @a[nbt={Inventory:[{Slot:-106b,id:"minecraft:carrot_on_a_stick"}]}] run scoreboard players set @s test_f 1
 execute if score round var matches -1 as @a[nbt={Inventory:[{Slot:-106b,id:"minecraft:carrot_on_a_stick"}]}] run function doudizhu:replaceitem_beforestart
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase1] as @a[nbt={Inventory:[{Slot:-106b,id:"minecraft:carrot_on_a_stick"}]}] run function doudizhu:replaceitem_jiao
+execute if entity @e[tag=doudizhu,tag=Center,tag=Phase3] as @a[nbt={Inventory:[{Slot:-106b,id:"minecraft:carrot_on_a_stick"}]}] run function doudizhu:replaceitem_qiang
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] as @a[nbt={Inventory:[{Slot:-106b,id:"minecraft:carrot_on_a_stick"}]}] run function doudizhu:replaceitem_chupai
 #检测错位
 execute as @a run function doudizhu:loop/detect_empty1
 execute if score round var matches -1 as @a[scores={test_empty=1..}] run function doudizhu:replaceitem_beforestart
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase1] as @a[scores={test_empty=1..}] run function doudizhu:replaceitem_jiao
+execute if entity @e[tag=doudizhu,tag=Center,tag=Phase3] as @a[scores={test_empty=1..}] run function doudizhu:replaceitem_qiang
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] as @a[scores={test_empty=1..}] run function doudizhu:replaceitem_chupai
 #检测green_dye
 execute as @a run function doudizhu:loop/detect_green_dye
 execute as @a[scores={test_green_dye=1..}] at @s run function doudizhu:replaceitem_green_dye
-execute as @a[scores={test_green_dye=1..13}] run function doudizhu:show_voice_chat_info
+execute as @a[scores={test_green_dye=1..22}] run function doudizhu:show_voice_chat_info
 #帽子检测
 execute as @a run function doudizhu:loop/detect_empty2
 
@@ -30,9 +33,10 @@ execute as @a run function doudizhu:loop/detect_empty2
 #execute as @a[scores={test_empty=1..}] run say @s 错位
 #execute as @a[scores={test_q=1..,test_empty=1..}] run say @s Q错位
 
-#游戏未开始时的选项选择
+#游戏未开始时的选项选择 以及 说明性文字
 execute if score round var matches -1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"指针"}'}}}},tag=!Player1,tag=!Player2,tag=!Player3] at @s positioned ~ ~1.8 ~ run function doudizhu:loop/see
 execute if score round var matches -1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"前往牌桌/返回大厅"}'}}}},tag=!Player1,tag=!Player2,tag=!Player3,scores={rclick=1..}] at @s run function doudizhu:tp_between
+execute if score round var matches -1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"欢迎文字"}'}}}},tag=!Player1,tag=!Player2,tag=!Player3,scores={rclick=1..}] at @s run tellraw @s ["",{"text":"=====斗 地 主=====","bold":true,"color":"red"},{"text":"\n"},{"text":"v1.2 (2021.2.9)","italic":true,"color":"red"},{"text":"\n"},{"text":"游戏规则：","bold":true,"color":"gold"},{"text":"维基百科","underlined":true,"clickEvent":{"action":"open_url","value":"https://zh.wikipedia.org/wiki/%E9%AC%A5%E5%9C%B0%E4%B8%BB"}},{"text":"\n\n"},{"text":"制作人员名单（顺序不分先后）：","bold":true,"color":"red"},{"text":"\n"},{"text":"命令：","bold":true,"color":"gold"},{"text":"TML_104","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/1862695"}},{"text":"\n"},{"text":"牌面：","bold":true,"color":"gold"},{"text":"xwjcool","underlined":true,"clickEvent":{"action":"open_url","value":"https://www.mcbbs.net/?259064"}},{"text":","},{"text":"mc_Kevin_Creeper","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/38899104"}},{"text":"\n"},{"text":"建筑：","bold":true,"color":"gold"},{"text":"落天望月","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/26260796"}},{"text":"\n"},{"text":"测试：","bold":true,"color":"gold"},{"text":"TML_104","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/1862695"}},{"text":","},{"text":"mc_Kevin_Creeper","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/38899104"}},{"text":","},{"text":"Sunny_loy_Kyle","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/33229178"}},{"text":"\n"}]
 execute if score round var matches -1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"基本操作说明"}'}}}},tag=!Player1,tag=!Player2,tag=!Player3,scores={rclick=1..}] at @s run tellraw @s ["",{"text":"====基本操作====","bold":true,"color":"red"},{"text":"\n"},{"text":"> ","bold":true,"color":"gold"},{"text":"手持"},{"text":"“指针”","bold":true,"color":"aqua"},{"text":"对准大厅各个按钮并按下使用键即可交互"},{"text":"\n"},{"text":"> ","bold":true,"color":"gold"},{"text":"使用"},{"text":"“前往牌桌/返回大厅”","bold":true,"color":"aqua"},{"text":"以在牌桌和大厅之间传送"},{"text":"\n"},{"text":"> ","bold":true,"color":"gold"},{"text":"叫地主阶段，手持"},{"text":"1、2、3","bold":true,"color":"aqua"},{"text":"或"},{"text":"Pass","bold":true,"color":"aqua"},{"text":"并按下使用键即可叫分"},{"text":"\n"},{"text":"> ","bold":true,"color":"gold"},{"text":"使用"},{"text":"“放大镜”（4号位）","bold":true,"color":"aqua"},{"text":"可启用/取消放大效果"},{"text":"\n"},{"text":"> ","bold":true,"color":"gold"},{"text":"使用"},{"text":"“弃牌堆记牌器”（5号位）","bold":true,"color":"aqua"},{"text":"可在屏幕上方显示/隐藏各个已打出牌的数量"},{"text":"\n"},{"text":"> ","bold":true,"color":"gold"},{"text":"开启"},{"text":"“玩家列表”","bold":true,"color":"red"},{"text":"可查看玩家的剩余牌数"},{"text":"\n"}]
 execute if score round var matches -1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"快速操作说明"}'}}}},tag=!Player1,tag=!Player2,tag=!Player3,scores={rclick=1..}] at @s run tellraw @s ["",{"text":"====快速操作====","bold":true,"color":"red"},{"text":"\n"},{"text":"（操作以默认按键为准）"},{"text":"\n"},{"text":"大厅：","bold":true,"color":"gold"},{"text":"[Q]：准备/取消准备  [F]：开始游戏"},{"text":"\n"},{"text":"游戏中","bold":true,"color":"gold"},{"text":"[Q]：Pass  [F]：出牌"},{"text":"\n"}]
 execute if score round var matches -1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"声音与快速聊天说明"}'}}}},tag=!Player1,tag=!Player2,tag=!Player3,scores={rclick=1..}] at @s run tellraw @s ["",{"text":"====声音与快速聊天====","bold":true,"color":"red"},{"text":"\n"},{"text":"> ","bold":true,"color":"gold"},{"text":"启用时，打开物品栏并点击对应图标以发送快速语音聊天"},{"text":"\n"},{"text":"“快速语音聊天”的音量：","bold":true,"color":"gold"},{"text":"“设置->音乐和声音->玩家”"},{"text":"\n"},{"text":"“背景音乐”的音量：","bold":true,"color":"gold"},{"text":"“设置->音乐和声音->唱片机/音符盒”"},{"text":"\n"},{"text":"“语音报牌”的音量：","bold":true,"color":"gold"},{"text":"“设置->音乐和声音->声音/语音”"},{"text":"\n"},{"text":"> ","bold":true,"color":"gold"},{"text":"推荐启用快速语音聊天时将对应音量调至50%以下"},{"text":"\n"}]
@@ -45,24 +49,33 @@ execute if score round var matches -1 as @a[scores={test_f=1..}] run function do
 
 #游戏开始后
 #阶段1 叫地主
+#注意这里不能给玩家的@a选择器添加rclick限制，否则F和Q键会不可用
+#execute as @e[scores={test_q=1..,rclick=0,test_f=0,test_empty=0}] run say @s
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase1] if score round var matches 0 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},tag=Player1] run function doudizhu:loop/jiao_see1
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase1] if score round var matches 1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},tag=Player2] run function doudizhu:loop/jiao_see2
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase1] if score round var matches 2 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},tag=Player3] run function doudizhu:loop/jiao_see3
+
+
+#阶段3 抢地主
+execute if entity @e[tag=doudizhu,tag=Center,tag=Phase3] if score round var matches 0 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},tag=Player1] run function doudizhu:loop/qiang_see1
+execute if entity @e[tag=doudizhu,tag=Center,tag=Phase3] if score round var matches 1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},tag=Player2] run function doudizhu:loop/qiang_see2
+execute if entity @e[tag=doudizhu,tag=Center,tag=Phase3] if score round var matches 2 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},tag=Player3] run function doudizhu:loop/qiang_see3
+
 
 #阶段2 出牌
 #选牌
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 0 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"指针"}'}}}},tag=Player1] at @s positioned ~ ~1.8 ~ run function doudizhu:loop/see1
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"指针"}'}}}},tag=Player2] at @s positioned ~ ~1.8 ~ run function doudizhu:loop/see2
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 2 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"指针"}'}}}},tag=Player3] at @s positioned ~ ~1.8 ~ run function doudizhu:loop/see3
-#使用其他钓竿
-execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 0 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},nbt=!{SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"Pointer"}'}}}},scores={rclick=1..},tag=Player1] run function doudizhu:loop/use_other_see1
-execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},nbt=!{SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"Pointer"}'}}}},scores={rclick=1..},tag=Player2] run function doudizhu:loop/use_other_see1
-execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 2 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},nbt=!{SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"Pointer"}'}}}},scores={rclick=1..},tag=Player3] run function doudizhu:loop/use_other_see1
-#F 
+#使用其他钓竿（这里“其他钓竿”特指“出牌”和“pass”这两个钓竿）
+execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 0 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},nbt=!{SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"指针"}'}}}},scores={rclick=1..},tag=Player1] run function doudizhu:loop/use_other_see1
+execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 1 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},nbt=!{SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"指针"}'}}}},scores={rclick=1..},tag=Player2] run function doudizhu:loop/use_other_see1
+execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 2 as @a[nbt={SelectedItem:{id:"minecraft:carrot_on_a_stick"}},nbt=!{SelectedItem:{id:"minecraft:carrot_on_a_stick",tag:{display:{Name:'{"text":"指针"}'}}}},scores={rclick=1..},tag=Player3] run function doudizhu:loop/use_other_see1
+#F （和上一步类似）
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 0 as @a[tag=Player1,scores={test_empty=0,test_f=1..,test_q=0}] run function doudizhu:loop/use_other_see1
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 1 as @a[tag=Player2,scores={test_empty=0,test_f=1..,test_q=0}] run function doudizhu:loop/use_other_see1
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 2 as @a[tag=Player3,scores={test_empty=0,test_f=1..,test_q=0}] run function doudizhu:loop/use_other_see1
-#Q 
+#Q （和上一步类似）
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 0 as @a[tag=Player1,scores={test_empty=0,test_f=0,test_q=1..}] run function doudizhu:loop/use_other_see1
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 1 as @a[tag=Player2,scores={test_empty=0,test_f=0,test_q=1..}] run function doudizhu:loop/use_other_see1
 execute if entity @e[tag=doudizhu,tag=Center,tag=Phase2] if score round var matches 2 as @a[tag=Player3,scores={test_empty=0,test_f=0,test_q=1..}] run function doudizhu:loop/use_other_see1

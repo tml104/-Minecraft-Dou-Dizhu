@@ -27,8 +27,8 @@ execute if entity @s[scores={rclick=1..}] if score rt_temp var matches -1 if sco
 #皮肤调节
 execute if entity @s[scores={rclick=1..}] as @e[tag=doudizhu,tag=UI,type=armor_stand,distance=..0.3,limit=1,tag=L_skin] run scoreboard players remove skin_type skin 1
 execute if entity @s[scores={rclick=1..}] as @e[tag=doudizhu,tag=UI,type=armor_stand,distance=..0.3,limit=1,tag=R_skin] run scoreboard players add skin_type skin 1
-execute if entity @s[scores={rclick=1..}] if score rt_temp var matches -1 if score skin_type skin matches ..0 run scoreboard players set skin_type skin 2
-execute if entity @s[scores={rclick=1..}] if score rt_temp var matches -1 if score skin_type skin matches 3.. run scoreboard players set skin_type skin 1
+execute if entity @s[scores={rclick=1..}] if score rt_temp var matches -1 if score skin_type skin matches ..0 run scoreboard players set skin_type skin 3
+execute if entity @s[scores={rclick=1..}] if score rt_temp var matches -1 if score skin_type skin matches 4.. run scoreboard players set skin_type skin 1
 
 #启用/禁用voice chat
 execute if entity @s[scores={rclick=1..}] as @e[tag=doudizhu,tag=UI,type=armor_stand,distance=..0.3,limit=1,tag=Voice] run scoreboard players add voice_chat var 1
@@ -43,6 +43,11 @@ execute if entity @s[scores={rclick=1..}] if score rt_temp var matches -1 if sco
 #启用/禁用出牌声音
 execute if entity @s[scores={rclick=1..}] as @e[tag=doudizhu,tag=UI,type=armor_stand,distance=..0.3,limit=1,tag=Google] run scoreboard players add google var 1
 execute if entity @s[scores={rclick=1..}] if score rt_temp var matches -1 if score google var matches 2.. run scoreboard players set google var 0
+
+#启用/禁用抢地主模式
+execute if entity @s[scores={rclick=1..}] as @e[tag=doudizhu,tag=UI,type=armor_stand,distance=..0.3,limit=1,tag=Qiang_Mode] run scoreboard players add qiang_mode var 1
+execute if entity @s[scores={rclick=1..}] if score rt_temp var matches -1 if score qiang_mode var matches 2.. run scoreboard players set qiang_mode var 0
+
 
 #更新UI显示
 execute if entity @s[scores={rclick=1..}] if score rt_temp var matches -1 run function doudizhu:upd_info
