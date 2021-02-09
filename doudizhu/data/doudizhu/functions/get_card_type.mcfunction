@@ -29,7 +29,8 @@ execute if score card_type outcards matches 0 if score card_cnt outcards matches
 
 execute if score card_type outcards matches 0 if score card_cnt outcards matches 6 run function doudizhu:get_card_type/is_6
 #tellraw @a [{"score": {"name": "card_type","objective": "outcards"}},{"score": {"name": "max_card","objective": "outcards"}},{"score": {"name": "card_cnt","objective": "outcards"}}]
-
+#四带二的8张牌形式
+execute if score card_type outcards matches 0 if score card_cnt outcards matches 8 run function doudizhu:get_card_type/is_6
 
 #不定长牌型
 execute if score card_type outcards matches 0 if score card_cnt outcards matches 6.. run function doudizhu:get_card_type/is_7

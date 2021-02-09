@@ -16,6 +16,16 @@ execute if score @s test_green_dye matches 10 run tellraw @a ["",{"selector":"@s
 execute if score @s test_green_dye matches 11 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“闷声发大财”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"闷声发大财"}]}}]
 execute if score @s test_green_dye matches 12 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“赢不了我”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"TA的牌赢不了我"}]}}]
 execute if score @s test_green_dye matches 13 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“可是换不得”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"可是换不得"}]}}]
+execute if score @s test_green_dye matches 14 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“阿姨你K都不要吗”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"阿姨你K都不要吗"}]}}]
+execute if score @s test_green_dye matches 15 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“理性打牌”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"理性打牌"}]}}]
+execute if score @s test_green_dye matches 16 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“头有亿点痛”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"我现在头有亿点痛"}]}}]
+execute if score @s test_green_dye matches 17 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“最后的倔强”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"这400万是我最后的倔强"}]}}]
+execute if score @s test_green_dye matches 18 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“快点啊我等到花都谢了”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"快点啊我等到花都谢了"}]}}]
+execute if score @s test_green_dye matches 19 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“你的牌打的也忒好了”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"你的牌打的也忒好了"}]}}]
+
+execute if score @s test_green_dye matches 20 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“你是MM还是GG”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"你是MM还是GG"}]}}]
+execute if score @s test_green_dye matches 21 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“决战到天亮”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"不要走，决战到天亮"}]}}]
+execute if score @s test_green_dye matches 22 run tellraw @a ["",{"selector":"@s"},{"text":"播放了语音"},{"text":"“离开”","bold":true,"color":"red","hoverEvent":{"action":"show_text","contents":[{"text":"各位，真不好意思，我得离开一会"}]}}]
 
 
 stopsound @a * minecraft:doudizhu.v1
@@ -31,6 +41,16 @@ stopsound @a * minecraft:doudizhu.v10
 stopsound @a * minecraft:doudizhu.v11
 stopsound @a * minecraft:doudizhu.v12
 stopsound @a * minecraft:doudizhu.v13
+stopsound @a * minecraft:doudizhu.v14
+stopsound @a * minecraft:doudizhu.v15
+stopsound @a * minecraft:doudizhu.v16
+stopsound @a * minecraft:doudizhu.v17
+stopsound @a * minecraft:doudizhu.v18
+stopsound @a * minecraft:doudizhu.v19
+stopsound @a * minecraft:doudizhu.v20
+stopsound @a * minecraft:doudizhu.v21
+stopsound @a * minecraft:doudizhu.v22
+
 
 
 
@@ -48,3 +68,13 @@ execute if score @s test_green_dye matches 10 as @a at @s run playsound minecraf
 execute if score @s test_green_dye matches 11 as @a at @s run playsound minecraft:doudizhu.v11 player @s
 execute if score @s test_green_dye matches 12 as @a at @s run playsound minecraft:doudizhu.v12 player @s
 execute if score @s test_green_dye matches 13 as @a at @s run playsound minecraft:doudizhu.v13 player @s
+execute if score @s test_green_dye matches 14 as @a at @s run playsound minecraft:doudizhu.v14 player @s
+execute if score @s test_green_dye matches 15 as @a at @s run playsound minecraft:doudizhu.v15 player @s
+execute if score @s test_green_dye matches 16 as @a at @s run playsound minecraft:doudizhu.v16 player @s
+execute if score @s test_green_dye matches 17 as @a at @s run playsound minecraft:doudizhu.v17 player @s
+execute if score @s test_green_dye matches 18 as @a at @s run playsound minecraft:doudizhu.v18 player @s
+execute if score @s test_green_dye matches 19 as @a at @s run playsound minecraft:doudizhu.v19 player @s
+
+execute if score @s test_green_dye matches 20 as @a at @s run playsound minecraft:doudizhu.v20 player @s
+execute if score @s test_green_dye matches 21 as @a at @s run playsound minecraft:doudizhu.v21 player @s
+execute if score @s test_green_dye matches 22 as @a at @s run playsound minecraft:doudizhu.v22 player @s

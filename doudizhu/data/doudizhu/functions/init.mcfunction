@@ -3,20 +3,26 @@ scoreboard objectives add var dummy
 scoreboard objectives add card_id dummy
 scoreboard objectives add const dummy
 scoreboard objectives add rclick minecraft.used:minecraft.carrot_on_a_stick
+scoreboard objectives add remain_cards dummy {"text": "剩余牌数"}
+#放大镜
 scoreboard objectives add amplifier dummy
-scoreboard objectives add remain_cards dummy
-#皮肤
-scoreboard objectives add skin dummy
-scoreboard players set skin_type skin 2
+scoreboard players set @a amplifier 0
 
-##voice_chat/BGM/google叫牌 开关
+#皮肤（1：kc  2：xwj  3：xwj+牌面分离）
+scoreboard objectives add skin dummy
+scoreboard players set skin_type skin 3
+
+##voice_chat/BGM/google叫牌/抢地主模式 开关
 scoreboard players set voice_chat var 1
 scoreboard players set bgm var 1
 scoreboard players set google var 1
+scoreboard players set qiang_mode var 1
 
 #位置记分板：控制玩家牌桌和大厅之间的传送
 scoreboard objectives add pos dummy
 
+#离开游戏记分板：用来输出意外退出游戏的提示
+scoreboard objectives add ddz_leavegame minecraft.custom:minecraft.leave_game
 
 #下面的记分板用于控制出牌信息
 #里面有max_card card_type， 以及1、2、...、13、14、15、sum
@@ -25,9 +31,11 @@ scoreboard objectives add last_outcards dummy
 #叫分记分板
 scoreboard objectives add jiaofen dummy
 #积分系统
-scoreboard objectives add score dummy
+scoreboard objectives add score dummy {"text": "分数"}
 scoreboard objectives setdisplay sidebar score
-scoreboard players set @a score 10000
+#scoreboard players set @a score 10000
+#exescoreboard players set @a[scores={score=-2147483648..2147483647}]
+execute as @a unless entity @s[scores={score=-2147483648..2147483647}] run scoreboard players set @s score 10000
 scoreboard players set #base score 1000
 scoreboard players set #scale score 0
 #出牌次数记分板
@@ -98,13 +106,14 @@ bossbar set show_score_and_scale visible false
 
 
 #位置marker
-execute unless entity @e[type=area_effect_cloud,tag=doudizhu,tag=Center] run summon area_effect_cloud ~ ~2 ~ {Duration:2147483647,Tags:["doudizhu","Center"]}
+execute unless entity @e[type=area_effect_cloud,tag=doudizhu,tag=Center] run summon area_effect_cloud ~ ~5 ~ {Duration:2147483647,Tags:["doudizhu","Center"]}
 execute unless entity @e[type=area_effect_cloud,tag=doudizhu,tag=Pos_Player1] at @e[type=area_effect_cloud,tag=doudizhu,tag=Center,limit=1] run summon area_effect_cloud ~4 ~ ~ {Duration:2147483647,Tags:["doudizhu","Pos_Player1","Pos_Player"],Rotation:[0.0f,0.0f]}
 execute unless entity @e[type=area_effect_cloud,tag=doudizhu,tag=Pos_Player2] at @e[type=area_effect_cloud,tag=doudizhu,tag=Center,limit=1] run summon area_effect_cloud ~ ~ ~4 {Duration:2147483647,Tags:["doudizhu","Pos_Player2","Pos_Player"],Rotation:[90.0f,0.0f]}
 execute unless entity @e[type=area_effect_cloud,tag=doudizhu,tag=Pos_Player3] at @e[type=area_effect_cloud,tag=doudizhu,tag=Center,limit=1] run summon area_effect_cloud ~ ~ ~-4 {Duration:2147483647,Tags:["doudizhu","Pos_Player3","Pos_Player"],Rotation:[-90.0f,0.0f]}
 execute unless entity @e[type=area_effect_cloud,tag=doudizhu,tag=Pos_Facedown] at @e[type=area_effect_cloud,tag=doudizhu,tag=Center,limit=1] run summon area_effect_cloud ~-4 ~ ~ {Duration:2147483647,Tags:["doudizhu","Pos_Facedown"],Rotation:[0.0f,0.0f]}
 tag @e[tag=doudizhu,tag=Center] remove Phase1
 tag @e[tag=doudizhu,tag=Center] remove Phase2
+tag @e[tag=doudizhu,tag=Center] remove Phase3
 tag @e[tag=doudizhu,tag=Pos_Player] remove dizhu
 
 clear @a
@@ -117,7 +126,7 @@ stopsound @a
 
 #生成UI……
 #summon armor_stand ~ ~ ~ {CustomNameVisible:true,CustomName:'{"text":"轻点这里以准备"}',NoGravity:true,Invisible:true,Marker:true,Rotation:[90.0f,0.0f],Tags:["doudizhu","UI","Join_game"],ArmorItems:[{id:"black_dye",Count:1b}]}
-execute unless entity @e[tag=doudizhu,tag=UI,tag=Join_game] as @e[tag=doudizhu,tag=Center,limit=1] at @s positioned ~47 ~ ~-1 run summon armor_stand ~ ~ ~ {CustomNameVisible:true,CustomName:'{"text":"准备/取消准备"}',NoGravity:true,Invisible:true,Marker:true,Rotation:[90.0f,0.0f],Tags:["doudizhu","UI","Join_game"],ArmorItems:[{},{},{},{id:"black_dye",Count:1b,tag:{CustomModelData:205}}]}
+execute unless entity @e[tag=doudizhu,tag=UI,tag=Join_game] as @e[tag=doudizhu,tag=Center,limit=1] at @s positioned ~22 ~-2 ~-13 run summon armor_stand ~ ~ ~ {CustomNameVisible:true,CustomName:'{"text":"准备/取消准备"}',NoGravity:true,Invisible:true,Marker:true,Rotation:[90.0f,0.0f],Tags:["doudizhu","UI","Join_game"],ArmorItems:[{},{},{},{id:"black_dye",Count:1b,tag:{CustomModelData:205}}]}
 execute unless entity @e[tag=doudizhu,tag=UI,tag=Start_game] as @e[tag=doudizhu,tag=Join_game,limit=1] at @s positioned ~ ~ ~-2 run summon armor_stand ~ ~ ~ {CustomNameVisible:true,CustomName:'{"text":"开始游戏"}',NoGravity:true,Invisible:true,Marker:true,Rotation:[90.0f,0.0f],Tags:["doudizhu","UI","Start_game"],ArmorItems:[{},{},{},{id:"black_dye",Count:1b,tag:{CustomModelData:206}}]}
 
 execute unless entity @e[tag=doudizhu,tag=UI,tag=L_score] as @e[tag=doudizhu,tag=Join_game,limit=1] at @s positioned ~ ~-1 ~-2 run summon armor_stand ~ ~ ~ {CustomNameVisible:false,CustomName:'{"text":"L1"}',NoGravity:true,Invisible:true,Marker:true,Rotation:[90.0f,0.0f],Tags:["doudizhu","UI","L_score"],ArmorItems:[{},{},{},{id:"black_dye",Count:1b,tag:{CustomModelData:201}}]}
@@ -134,6 +143,7 @@ execute unless entity @e[tag=doudizhu,tag=UI,tag=Skin_type_name] as @e[tag=doudi
 execute unless entity @e[tag=doudizhu,tag=UI,tag=Voice] as @e[tag=doudizhu,tag=Join_game,limit=1] at @s positioned ~ ~ ~2 run summon armor_stand ~ ~ ~ {CustomNameVisible:true,CustomName:'{"text":"快速聊天"}',NoGravity:true,Invisible:true,Marker:true,Rotation:[90.0f,0.0f],Tags:["doudizhu","UI","Voice"],ArmorItems:[{},{},{},{id:"black_dye",Count:1b,tag:{CustomModelData:204}}]}
 execute unless entity @e[tag=doudizhu,tag=UI,tag=BGM] as @e[tag=doudizhu,tag=Join_game,limit=1] at @s positioned ~ ~ ~3 run summon armor_stand ~ ~ ~ {CustomNameVisible:true,CustomName:'{"text":"背景音乐"}',NoGravity:true,Invisible:true,Marker:true,Rotation:[90.0f,0.0f],Tags:["doudizhu","UI","BGM"],ArmorItems:[{},{},{},{id:"black_dye",Count:1b,tag:{CustomModelData:204}}]}
 execute unless entity @e[tag=doudizhu,tag=UI,tag=Google] as @e[tag=doudizhu,tag=Join_game,limit=1] at @s positioned ~ ~ ~4 run summon armor_stand ~ ~ ~ {CustomNameVisible:true,CustomName:'{"text":"语音报牌"}',NoGravity:true,Invisible:true,Marker:true,Rotation:[90.0f,0.0f],Tags:["doudizhu","UI","Google"],ArmorItems:[{},{},{},{id:"black_dye",Count:1b,tag:{CustomModelData:204}}]}
+execute unless entity @e[tag=doudizhu,tag=UI,tag=Qiang_Mode] as @e[tag=doudizhu,tag=Join_game,limit=1] at @s positioned ~ ~ ~5 run summon armor_stand ~ ~ ~ {CustomNameVisible:true,CustomName:'{"text":"抢地主模式"}',NoGravity:true,Invisible:true,Marker:true,Rotation:[90.0f,0.0f],Tags:["doudizhu","UI","Qiang_Mode"],ArmorItems:[{},{},{},{id:"black_dye",Count:1b,tag:{CustomModelData:204}}]}
 #说明性文字：弃用，改为让玩家在6789槽位触发
 
 #execute unless entity @e[tag=doudizhu,tag=Jiben_1] as @e[tag=doudizhu,tag=Join_game,limit=1] at @s positioned ~-4 ~1 ~-3 run summon area_effect_cloud ~ ~ ~ {CustomNameVisible:true,CustomName:'{"text":"基本操作","bold":true}',Tags:["doudizhu","UI","Jiben_1"],Duration:2147483647}
@@ -169,25 +179,42 @@ execute unless entity @e[tag=doudizhu,tag=UI,tag=Google] as @e[tag=doudizhu,tag=
 
 #生成结构
 kill @e[type=item_frame]
-execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~-5 ~-6 ~-10 minecraft:structure_block{mode:"LOAD",name:"doudizhu:playing_room",posX:0,posY:1,posZ:0} destroy
-execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~12 ~-4 ~-10 minecraft:structure_block{mode:"LOAD",name:"doudizhu:lobby",posX:0,posY:1,posZ:0} destroy
+execute as @e[tag=doudizhu,tag=Slime] at @s run tp @s ~ ~-1000 ~
+#execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~-5 ~-6 ~-10 minecraft:structure_block{mode:"LOAD",name:"doudizhu:playing_room",posX:0,posY:1,posZ:0} destroy
+#execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~12 ~-4 ~-10 minecraft:structure_block{mode:"LOAD",name:"doudizhu:lobby",posX:0,posY:1,posZ:0} destroy
+execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~-13 ~-6 ~-21 minecraft:structure_block{mode:"LOAD",name:"doudizhu:lobby2",posX:0,posY:1,posZ:0} destroy
 
 #激活
-execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~-5 ~-5 ~-10 minecraft:redstone_block destroy
-execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~-5 ~-6 ~-10 minecraft:air
-execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~12 ~-3 ~-10 minecraft:redstone_block destroy
-execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~12 ~-4 ~-10 minecraft:air
+#execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~-5 ~-5 ~-10 minecraft:redstone_block destroy
+#execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~-5 ~-6 ~-10 minecraft:air
+#execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~12 ~-3 ~-10 minecraft:redstone_block destroy
+#execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~12 ~-4 ~-10 minecraft:air
+execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~-13 ~-5 ~-21 minecraft:redstone_block
+execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run setblock ~-13 ~-6 ~-21 minecraft:air
 
 #中间填充air
 execute as @e[tag=Center,tag=doudizhu,limit=1] at @s run fill ~2 ~1 ~2 ~-3 ~4 ~-3 minecraft:air
 kill @e[type=item]
 
+#更新ui信息
 function doudizhu:upd_info
 
 #tp 玩家
 execute as @e[tag=Join_game,tag=doudizhu,limit=1] at @s run tp @a @s
 gamemode adventure @a
 
-#say 斗地主08242207
-#say 斗地主0830
-tellraw @a ["",{"text":"=====斗 地 主=====","bold":true,"color":"red"},{"text":"\n"},{"text":"v1.0 (2020.9.10)","italic":true,"color":"red"},{"text":"\n"},{"text":"游戏规则：","bold":true,"color":"gold"},{"text":"维基百科","underlined":true,"clickEvent":{"action":"open_url","value":"https://zh.wikipedia.org/wiki/%E9%AC%A5%E5%9C%B0%E4%B8%BB"}},{"text":"\n\n"},{"text":"制作人员名单（顺序不分先后）：","bold":true,"color":"red"},{"text":"\n"},{"text":"命令：","bold":true,"color":"gold"},{"text":"TML_104","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/1862695"}},{"text":"\n"},{"text":"牌面：","bold":true,"color":"gold"},{"text":"xwjcool","underlined":true,"clickEvent":{"action":"open_url","value":"https://www.mcbbs.net/?259064"}},{"text":","},{"text":"mc_Kevin_Creeper","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/38899104"}},{"text":"\n"},{"text":"建筑：","bold":true,"color":"gold"},{"text":"落天望月","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/26260796"}},{"text":"\n"},{"text":"测试：","bold":true,"color":"gold"},{"text":"TML_104","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/1862695"}},{"text":","},{"text":"mc_Kevin_Creeper","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/38899104"}},{"text":","},{"text":"Sunny_loy_Kyle","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/33229178"}},{"text":"\n"}]
+#spawn point
+execute as @e[tag=doudizhu,tag=Center,limit=1] run setworldspawn ~ ~2 ~
+
+#难度和Gamerule
+difficulty easy
+gamerule doMobSpawning false
+gamerule doLimitedCrafting true
+gamerule maxCommandChainLength 2147483647
+
+#合成配方take
+recipe take @a *
+
+#欢迎文字
+#记得同时修改rt下面的说明
+tellraw @a ["",{"text":"=====斗 地 主=====","bold":true,"color":"red"},{"text":"\n"},{"text":"v1.2 (2021.2.9)","italic":true,"color":"red"},{"text":"\n"},{"text":"游戏规则：","bold":true,"color":"gold"},{"text":"维基百科","underlined":true,"clickEvent":{"action":"open_url","value":"https://zh.wikipedia.org/wiki/%E9%AC%A5%E5%9C%B0%E4%B8%BB"}},{"text":"\n\n"},{"text":"制作人员名单（顺序不分先后）：","bold":true,"color":"red"},{"text":"\n"},{"text":"命令：","bold":true,"color":"gold"},{"text":"TML_104","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/1862695"}},{"text":"\n"},{"text":"牌面：","bold":true,"color":"gold"},{"text":"xwjcool","underlined":true,"clickEvent":{"action":"open_url","value":"https://www.mcbbs.net/?259064"}},{"text":","},{"text":"mc_Kevin_Creeper","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/38899104"}},{"text":"\n"},{"text":"建筑：","bold":true,"color":"gold"},{"text":"落天望月","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/26260796"}},{"text":"\n"},{"text":"测试：","bold":true,"color":"gold"},{"text":"TML_104","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/1862695"}},{"text":","},{"text":"mc_Kevin_Creeper","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/38899104"}},{"text":","},{"text":"Sunny_loy_Kyle","underlined":true,"clickEvent":{"action":"open_url","value":"https://space.bilibili.com/33229178"}},{"text":"\n"}]

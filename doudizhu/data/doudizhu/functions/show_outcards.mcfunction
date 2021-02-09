@@ -26,6 +26,8 @@ execute if score round var matches 0 as @e[tag=doudizhu,tag=Pos_Player1] at @s p
 execute if score round var matches 1 as @e[tag=doudizhu,tag=Pos_Player2] at @s positioned ^ ^ ^-3 positioned ~ ~0.5 ~ run function doudizhu:recursive/show_outcards_recursive
 execute if score round var matches 2 as @e[tag=doudizhu,tag=Pos_Player3] at @s positioned ^ ^ ^-3 positioned ~ ~0.5 ~ run function doudizhu:recursive/show_outcards_recursive
 kill @e[tag=doudizhu,tag=SO_1]
+execute if score skin_type skin matches 3 run schedule function doudizhu:show_outcards_elapse 5t replace
+execute unless score skin_type skin matches 3 run function doudizhu:show_outcards_elapse
 
 #更新last_outcards记分板
 scoreboard players operation max_card last_outcards = max_card outcards

@@ -1,4 +1,4 @@
-#[UO]
+#[UO] 出牌，Pass以及游戏结束的判定
 #var:uo_temp uo_dizhu_cnt uo_nongmin_cnt
 
 #类型变量
@@ -51,15 +51,17 @@ execute if score uo_temp var matches 1 if score round var matches 1 run scoreboa
 execute if score uo_temp var matches 1 if score round var matches 2 run scoreboard players add @e[tag=doudizhu,tag=Pos_Player3] shed_time 1
 execute if score uo_temp var matches 1 run scoreboard players set pass_cnt var 0
 execute if score uo_temp var matches 1 run function doudizhu:upd_remain_cards
+execute if score uo_temp var matches 1 if score skin_type skin matches 3 run function doudizhu:distribute_cards3
 execute if score uo_temp var matches 1 if entity @e[tag=doudizhu,tag=Pos_Player,scores={remain_cards=1..2}] run scoreboard players add bomb_cnt bomb 1
-#声音
+
+##声音播放
+#就剩x张牌了
 execute if score google var matches 1 if score uo_temp var matches 1 if score round var matches 0 if entity @e[tag=doudizhu,tag=Pos_Player1,scores={remain_cards=2}] as @a at @s run playsound minecraft:doudizhu.left2 voice @s
 execute if score google var matches 1 if score uo_temp var matches 1 if score round var matches 1 if entity @e[tag=doudizhu,tag=Pos_Player2,scores={remain_cards=2}] as @a at @s run playsound minecraft:doudizhu.left2 voice @s
 execute if score google var matches 1 if score uo_temp var matches 1 if score round var matches 2 if entity @e[tag=doudizhu,tag=Pos_Player3,scores={remain_cards=2}] as @a at @s run playsound minecraft:doudizhu.left2 voice @s
 execute if score google var matches 1 if score uo_temp var matches 1 if score round var matches 0 if entity @e[tag=doudizhu,tag=Pos_Player1,scores={remain_cards=1}] as @a at @s run playsound minecraft:doudizhu.left1 voice @s
 execute if score google var matches 1 if score uo_temp var matches 1 if score round var matches 1 if entity @e[tag=doudizhu,tag=Pos_Player2,scores={remain_cards=1}] as @a at @s run playsound minecraft:doudizhu.left1 voice @s
 execute if score google var matches 1 if score uo_temp var matches 1 if score round var matches 2 if entity @e[tag=doudizhu,tag=Pos_Player3,scores={remain_cards=1}] as @a at @s run playsound minecraft:doudizhu.left1 voice @s
-
 #单牌
 execute if score google var matches 1 if score uo_temp var matches 1 if score card_type outcards matches 1 if score max_card outcards matches 1 as @a at @s run playsound minecraft:doudizhu.a voice @s
 execute if score google var matches 1 if score uo_temp var matches 1 if score card_type outcards matches 1 if score max_card outcards matches 2 as @a at @s run playsound minecraft:doudizhu.2 voice @s
@@ -112,11 +114,13 @@ execute if score uo_temp var matches 1 if score card_type outcards matches 12 ru
 execute if score uo_temp var matches 1 if score card_type outcards matches 13 run tellraw @a {"text":"王炸：倍率*4","bold":true,"color":"red"}
 execute if score uo_temp var matches 1 if score card_type outcards matches 13 run scoreboard players operation #scale score *= 4 const
 execute if score uo_temp var matches 1 if score card_type outcards matches 12..13 run function doudizhu:upd_score_bossbar
-#更新bomb
+#更新bomb（用于修改bgm）
 execute if score uo_temp var matches 1 if score card_type outcards matches 12..13 run scoreboard players add bomb_cnt bomb 1
 execute if score uo_temp var matches 1 if score bomb_cnt bomb matches 1.. run scoreboard players operation time_index timer = now_time timer
 #防止重复触发……
 execute if score uo_temp var matches 1 if score bomb_cnt bomb matches 1.. run scoreboard players set bomb_cnt bomb -2147483648
+#播放炸弹音效
+execute if score uo_temp var matches 1 if score card_type outcards matches 12..13 run function doudizhu:play_explosion
 
 #更新弃牌堆
 execute if score uo_temp var matches 1 run scoreboard players operation 1 abandoned_cards += 1 outcards
@@ -201,21 +205,24 @@ execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player
 execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=!dizhu] if score uo_dizhu_cnt var matches 1 run scoreboard players operation #scale score *= 4 const
 execute if score uo_temp var matches -1 run function doudizhu:upd_score_bossbar
 #最后计算
-execute if score uo_temp var matches -1 run scoreboard players operation #base score *= #scale score
-execute if score uo_temp var matches -1 run scoreboard players operation #base2 score = #base score
+execute if score uo_temp var matches -1 run scoreboard players operation #base1 score = #base score
+execute if score uo_temp var matches -1 run scoreboard players operation #base1 score *= #scale score
+execute if score uo_temp var matches -1 run scoreboard players operation #base2 score = #base1 score
 execute if score uo_temp var matches -1 run scoreboard players operation #base2 score /= 2 const
 #地主胜利
 execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=dizhu] run tellraw @a {"text":"===地主获胜===","bold":true,"color":"gold"}
-execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=dizhu] run scoreboard players operation @a[tag=dizhu,tag=Playing] score += #base score
+execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=dizhu] run scoreboard players operation @a[tag=dizhu,tag=Playing] score += #base1 score
 execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=dizhu] run scoreboard players operation @a[tag=!dizhu,tag=Playing] score -= #base2 score
-execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=dizhu] run tellraw @a ["",{"selector":"@a[tag=dizhu,tag=Playing]","bold":true,"color":"gold"},{"text":":+","bold":true,"color":"gold"},{"score":{"name":"#base","objective":"score"},"bold":true,"color":"gold"}]
+execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=dizhu] run tellraw @a ["",{"selector":"@a[tag=dizhu,tag=Playing]","bold":true,"color":"gold"},{"text":":+","bold":true,"color":"gold"},{"score":{"name":"#base1","objective":"score"},"bold":true,"color":"gold"}]
 execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=dizhu] run tellraw @a ["",{"selector":"@a[tag=!dizhu,tag=Playing]","bold":true,"color":"red"},{"text":":-","bold":true,"color":"red"},{"score":{"name":"#base2","objective":"score"},"bold":true,"color":"red"}]
 #农民胜利
 execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=!dizhu] run tellraw @a {"text":"===农民获胜===","bold":true,"color":"red"}
-execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=!dizhu] run scoreboard players operation @a[tag=dizhu,tag=Playing] score -= #base score
+execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=!dizhu] run scoreboard players operation @a[tag=dizhu,tag=Playing] score -= #base1 score
 execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=!dizhu] run scoreboard players operation @a[tag=!dizhu,tag=Playing] score += #base2 score
-execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=!dizhu] run tellraw @a ["",{"selector":"@a[tag=dizhu,tag=Playing]","bold":true,"color":"gold"},{"text":":-","bold":true,"color":"gold"},{"score":{"name":"#base","objective":"score"},"bold":true,"color":"gold"}]
+execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=!dizhu] run tellraw @a ["",{"selector":"@a[tag=dizhu,tag=Playing]","bold":true,"color":"gold"},{"text":":-","bold":true,"color":"gold"},{"score":{"name":"#base1","objective":"score"},"bold":true,"color":"gold"}]
 execute if score uo_temp var matches -1 if entity @e[tag=doudizhu,tag=Pos_Player,tag=Finished,tag=!dizhu] run tellraw @a ["",{"selector":"@a[tag=!dizhu,tag=Playing]","bold":true,"color":"red"},{"text":":+","bold":true,"color":"red"},{"score":{"name":"#base2","objective":"score"},"bold":true,"color":"red"}]
+#显示title
+execute if score uo_temp var matches -1 run function doudizhu:final_show_title
 #摊牌处理
 execute if score uo_temp var matches -1 as @e[tag=doudizhu,tag=Pos_Player] at @s run function doudizhu:final_show_cards
 #场景fill air
@@ -223,10 +230,13 @@ execute if score uo_temp var matches -1 as @e[tag=Center,tag=doudizhu,limit=1] a
 #TP 观察者
 execute if score uo_temp var matches -1 as @a[tag=!Player1,tag=!Player2,tag=!Player3] run tp @s @e[tag=doudizhu,tag=Join_game,limit=1]
 execute if score uo_temp var matches -1 as @a[tag=!Player1,tag=!Player2,tag=!Player3] run gamemode adventure @s
-
+#清除放大镜效果
+execute if score uo_temp var matches -1 run scoreboard players set @a amplifier 0
 #去掉标签并重置……
 execute if score uo_temp var matches -1 as @e[tag=doudizhu,tag=Center] run tag @s remove Phase1
 execute if score uo_temp var matches -1 as @e[tag=doudizhu,tag=Center] run tag @s remove Phase2
+execute if score uo_temp var matches -1 as @e[tag=doudizhu,tag=Center] run tag @s remove Phase3
+execute if score uo_temp var matches -1 as @e[tag=doudizhu,tag=Center] run tag @s remove Phase4
 execute if score uo_temp var matches -1 run scoreboard players set round var -1
 execute if score uo_temp var matches -1 run tag @a remove Player1
 execute if score uo_temp var matches -1 run tag @a remove Player2
