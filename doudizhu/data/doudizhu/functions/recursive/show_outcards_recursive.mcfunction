@@ -3,7 +3,8 @@
 #var:"SO_2"
 
 execute as @e[tag=doudizhu,tag=Selected,type=armor_stand,distance=..0.1] run tag @s add SO_2
-execute as @e[tag=doudizhu,tag=SO_2,type=armor_stand] run data merge entity @s {Pose:{Head:[-90.0f,0.0f,0.0f]}}
+# 0 -> 90 -> -90
+execute as @e[tag=doudizhu,tag=SO_2,type=armor_stand] run data merge entity @s {Pose:{Head:[90.0f,0.0f,0.0f]}}
 execute as @e[tag=doudizhu,tag=SO_2,type=armor_stand] run data modify entity @s Pos[0] set from entity @e[limit=1,tag=SO_1,tag=doudizhu] Pos[0]
 execute as @e[tag=doudizhu,tag=SO_2,type=armor_stand] run data modify entity @s Pos[1] set from entity @e[limit=1,tag=SO_1,tag=doudizhu] Pos[1]
 execute as @e[tag=doudizhu,tag=SO_2,type=armor_stand] run data modify entity @s Pos[2] set from entity @e[limit=1,tag=SO_1,tag=doudizhu] Pos[2]
