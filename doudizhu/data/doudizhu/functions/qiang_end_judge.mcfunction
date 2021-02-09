@@ -1,34 +1,29 @@
-#[JS] 叫地主的结束判定
+#[QS] 抢地主的结束判定
 #调用对象：Pos_Player123
 #var:js_temp
 
 scoreboard players set js_temp var 0
 #声音
-execute if score google var matches 1 if score @s jiaofen matches -1 as @a at @s run playsound minecraft:doudizhu.pass_jiao voice @s
-execute if score google var matches 1 if score @s jiaofen matches 1 as @a at @s run playsound minecraft:doudizhu.1p voice @s
-execute if score google var matches 1 if score @s jiaofen matches 2 as @a at @s run playsound minecraft:doudizhu.2p voice @s
-execute if score google var matches 1 if score @s jiaofen matches 3 as @a at @s run playsound minecraft:doudizhu.3p voice @s
-
+execute if score google var matches 1 if score @s jiaofen matches -1 if score jiaofen_times jiaofen matches 0 as @a at @s run playsound minecraft:doudizhu.pass_jiao voice @s
+execute if score google var matches 1 if score @s jiaofen matches -1 if score jiaofen_times jiaofen matches 1.. as @a at @s run playsound minecraft:doudizhu.buqiang voice @s
+#抢地主、叫地主的声音
+execute if score google var matches 1 if score @s jiaofen matches 1.. if score jiaofen_times jiaofen matches 1 as @a at @s run playsound minecraft:doudizhu.jiaodizhu voice @s
+execute if score google var matches 1 if score @s jiaofen matches 1.. if score jiaofen_times jiaofen matches 2.. as @a at @s run playsound minecraft:doudizhu.qiangdizhu voice @s
 
 #更新倍率记分板
-execute if score @s jiaofen matches 1.. run scoreboard players operation #scale score += @s jiaofen
+execute if score @s jiaofen matches 1.. run scoreboard players operation #scale score *= 2 const
 execute if score @s jiaofen matches 1.. run function doudizhu:upd_score_bossbar
 
-#三分直接结束
-execute if score @s jiaofen matches 3 run tag @s add dizhu
+#已经有2分那么直接结束
+execute if score @s jiaofen matches 2 run tag @s add dizhu
 
-#否则最后叫分最大者成为地主
-#更新叫分最大者
-execute if score @s jiaofen >= maxscore jiaofen run tag @e[tag=doudizhu,tag=Pos_Player] remove Maxscore
-execute if score @s jiaofen >= maxscore jiaofen run tag @s add Maxscore
-execute if score @s jiaofen >= maxscore jiaofen run scoreboard players operation maxscore jiaofen = @s jiaofen
-
-#当所有玩家分数都有，那么确定Maxscore标签者为地主
-execute unless score @e[tag=doudizhu,tag=Pos_Player1,limit=1] jiaofen matches 0 unless score @e[tag=doudizhu,tag=Pos_Player2,limit=1] jiaofen matches 0 unless score @e[tag=doudizhu,tag=Pos_Player3,limit=1] jiaofen matches 0 run tag @e[tag=Maxscore,limit=1] add dizhu
+#否则不是负分的人成为地主（此时叫分情况一定是形如1,-1,-1）
+execute if score @e[tag=doudizhu,tag=Pos_Player1,limit=1] jiaofen matches 1.. if score @e[tag=doudizhu,tag=Pos_Player2,limit=1] jiaofen matches -1 if score @e[tag=doudizhu,tag=Pos_Player3,limit=1] jiaofen matches -1 run tag @e[tag=doudizhu,tag=Pos_Player1,limit=1] add dizhu
+execute if score @e[tag=doudizhu,tag=Pos_Player1,limit=1] jiaofen matches -1 if score @e[tag=doudizhu,tag=Pos_Player2,limit=1] jiaofen matches 1.. if score @e[tag=doudizhu,tag=Pos_Player3,limit=1] jiaofen matches -1 run tag @e[tag=doudizhu,tag=Pos_Player2,limit=1] add dizhu
+execute if score @e[tag=doudizhu,tag=Pos_Player1,limit=1] jiaofen matches -1 if score @e[tag=doudizhu,tag=Pos_Player2,limit=1] jiaofen matches -1 if score @e[tag=doudizhu,tag=Pos_Player3,limit=1] jiaofen matches 1.. run tag @e[tag=doudizhu,tag=Pos_Player3,limit=1] add dizhu
 
 #地主存在，结束叫分
-execute if entity @e[tag=dizhu] run tag @e[tag=doudizhu,tag=Pos_Player] remove Maxscore
-execute if entity @e[tag=dizhu] run tag @e[tag=doudizhu,tag=Center] remove Phase1
+execute if entity @e[tag=dizhu] run tag @e[tag=doudizhu,tag=Center] remove Phase3
 execute if entity @e[tag=dizhu] run tag @e[tag=doudizhu,tag=Center] add Phase2
 execute if entity @e[tag=dizhu] run scoreboard players set js_temp var 1
 execute if score js_temp var matches 1 run clear @a minecraft:carrot_on_a_stick
@@ -105,18 +100,22 @@ execute if score js_temp var matches -1 run scoreboard players operation round v
 execute if score js_temp var matches -1 if score round var matches 0 run tellraw @a ["",{"selector":"@p[tag=Player1]","bold":true,"color":"gold"},{"text":"开始叫分","color":"gold"}]
 execute if score js_temp var matches -1 if score round var matches 1 run tellraw @a ["",{"selector":"@p[tag=Player2]","bold":true,"color":"gold"},{"text":"开始叫分","color":"gold"}]
 execute if score js_temp var matches -1 if score round var matches 2 run tellraw @a ["",{"selector":"@p[tag=Player3]","bold":true,"color":"gold"},{"text":"开始叫分","color":"gold"}]
-execute if score js_temp var matches -1 run tag @e[tag=doudizhu,tag=Center] remove Phase1
+execute if score js_temp var matches -1 run tag @e[tag=doudizhu,tag=Center] remove Phase3
 execute if score js_temp var matches -1 run tag @e[tag=doudizhu,tag=Center] remove Phase2
-execute if score js_temp var matches -1 run tag @e[tag=doudizhu,tag=Center] add Phase1
+execute if score js_temp var matches -1 run tag @e[tag=doudizhu,tag=Center] add Phase3
 execute if score js_temp var matches -1 run scoreboard players set @e[tag=doudizhu,tag=Pos_Player1] jiaofen 0
 execute if score js_temp var matches -1 run scoreboard players set @e[tag=doudizhu,tag=Pos_Player2] jiaofen 0
 execute if score js_temp var matches -1 run scoreboard players set @e[tag=doudizhu,tag=Pos_Player3] jiaofen 0
-execute if score js_temp var matches -1 run scoreboard players set maxscore jiaofen 0
+execute if score js_temp var matches -1 run scoreboard players set jiaofen_times jiaofen 0
+
 
 #否则轮到下一个玩家打分
 execute if score js_temp var matches 0 run scoreboard players add round var 1
+#特判下一个玩家是不是本来就是-1，是的话就跳过他（最多跳过一次）
+execute if score js_temp var matches 0 if score round var matches 0 if score @e[tag=doudizhu,tag=Pos_Player1,limit=1] jiaofen matches -1 run scoreboard players add round var 1
+execute if score js_temp var matches 0 if score round var matches 1 if score @e[tag=doudizhu,tag=Pos_Player2,limit=1] jiaofen matches -1 run scoreboard players add round var 1
+execute if score js_temp var matches 0 if score round var matches 2 if score @e[tag=doudizhu,tag=Pos_Player3,limit=1] jiaofen matches -1 run scoreboard players add round var 1
 execute if score js_temp var matches 0 run scoreboard players operation round var %= 3 const
 execute if score js_temp var matches 0 if score round var matches 0 run tellraw @a ["",{"text":"轮到","color":"gold"},{"selector":"@p[tag=Player1]","bold":true,"color":"gold"},{"text":"叫分","color":"gold"}]
 execute if score js_temp var matches 0 if score round var matches 1 run tellraw @a ["",{"text":"轮到","color":"gold"},{"selector":"@p[tag=Player2]","bold":true,"color":"gold"},{"text":"叫分","color":"gold"}]
 execute if score js_temp var matches 0 if score round var matches 2 run tellraw @a ["",{"text":"轮到","color":"gold"},{"selector":"@p[tag=Player3]","bold":true,"color":"gold"},{"text":"叫分","color":"gold"}]
-

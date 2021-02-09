@@ -27,3 +27,22 @@ replaceitem entity @a inventory.10 minecraft:green_dye{CustomModelData:411,displ
 replaceitem entity @a inventory.11 minecraft:green_dye{CustomModelData:412,display:{Name:'{"text":"赢不了我"}',Lore:['{"text":"TA的牌赢不了我"}']}}
 
 replaceitem entity @a inventory.12 minecraft:green_dye{CustomModelData:413,display:{Name:'{"text":"可是换不得"}',Lore:['{"text":"可是换不得"}']}}
+
+replaceitem entity @a inventory.13 minecraft:green_dye{CustomModelData:414,display:{Name:'{"text":"阿姨你K都不要吗"}',Lore:['{"text":"阿姨你K都不要吗"}']}}
+
+replaceitem entity @a inventory.14 minecraft:green_dye{CustomModelData:415,display:{Name:'{"text":"理性打牌"}',Lore:['{"text":"理性打牌"}']}}
+
+replaceitem entity @a inventory.15 minecraft:green_dye{CustomModelData:416,display:{Name:'{"text":"头有亿点痛"}',Lore:['{"text":"我现在头有亿点痛"}']}}
+
+replaceitem entity @a inventory.16 minecraft:green_dye{CustomModelData:417,display:{Name:'{"text":"最后的倔强"}',Lore:['{"text":"这400万是我最后的倔强"}']}}
+
+replaceitem entity @a inventory.17 minecraft:green_dye{CustomModelData:418,display:{Name:'{"text":"快点啊我等到花都谢了"}',Lore:['{"text":"快点啊我等到花都谢了"}']}}
+
+
+replaceitem entity @a inventory.18 minecraft:green_dye{CustomModelData:419,display:{Name:'{"text":"你的牌打的也忒好了"}',Lore:['{"text":"你的牌打的也忒好了"}']}}
+
+replaceitem entity @a inventory.19 minecraft:green_dye{CustomModelData:420,display:{Name:'{"text":"你是MM还是GG"}',Lore:['{"text":"你是MM还是GG"}']}}
+
+replaceitem entity @a inventory.20 minecraft:green_dye{CustomModelData:421,display:{Name:'{"text":"决战到天亮"}',Lore:['{"text":"不要走，决战到天亮"}']}}
+
+replaceitem entity @a inventory.21 minecraft:green_dye{CustomModelData:422,display:{Name:'{"text":"离开"}',Lore:['{"text":"各位，真不好意思，我得离开一会"}']}}
