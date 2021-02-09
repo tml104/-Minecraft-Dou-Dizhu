@@ -1,3 +1,3 @@
-#[GMC] 高频改变玩家的游戏模式(debug除外)
+#[GMC] 高频改变玩家的游戏模式(debug除外) (弃用)
 
-execute as @a[gamemode=!adventure,tag=!doudizhu_DEBUG] run gamemode adventure @s
+#execute as @a[gamemode=!adventure,tag=!doudizhu_DEBUG] run gamemode adventure @s
